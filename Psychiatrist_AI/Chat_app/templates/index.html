@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chatbot</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a1a;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .chat-container {
+            width: 90%;
+            max-width: 800px;
+            height: 90vh;
+            background: #2d2d2d;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 70%;
+            padding: 12px 18px;
+            border-radius: 10px;
+            word-wrap: break-word;
+        }
+
+        .user-message {
+            align-self: flex-start;
+            background: #404040;
+            color: white;
+            border: 1px solid #555;
+        }
+
+        .ai-message {
+            align-self: flex-end;
+            background: #1a1a1a;
+            color: white;
+            border: 1px solid #333;
+        }
+
+        .input-area {
+            padding: 20px;
+            background: #2d2d2d;
+            border-top: 1px solid #404040;
+            display: flex;
+            gap: 10px;
+        }
+
+        .text-input {
+            flex: 1;
+            padding: 12px;
+            background: #1a1a1a;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: white;
+            font-size: 14px;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #888;
+        }
+
+        button {
+            padding: 12px 24px;
+            background: #404040;
+            border: 1px solid #555;
+            border-radius: 5px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        button:hover {
+            background: #4d4d4d;
+        }
+
+        button:active {
+            background: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-messages" id="chatMessages"></div>
+        
+        <div class="input-area">
+            <input type="text" class="text-input" id="textInput" placeholder="Type your message...">
+            <button onclick="sendMessage()">Send</button>
+            <button onclick="voiceChat()">Voice</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            const input = document.getElementById('textInput');
+            const message = input.value.trim();
+            
+            if (message) {
+                addMessage(message, 'user');
+                input.value = '';
+                
+                setTimeout(() => {
+                    addMessage('This is AI response', 'ai');
+                }, 500);
+            }
+        }
+
+        function addMessage(text, sender) {
+            const messagesDiv = document.getElementById('chatMessages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = sender === 'user' ? 'message user-message' : 'message ai-message';
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function voiceChat() {
+            addMessage('Voice message', 'user');
+            setTimeout(() => {
+                addMessage('Voice response from AI', 'ai');
+            }, 500);
+        }
+
+        document.getElementById('textInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>
