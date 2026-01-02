@@ -106,8 +106,8 @@
     <div class="chat-container">
         <div class="chat-messages" id="chatMessages"></div>
         
-        <div class="input-area">
-            <input type="text" class="text-input" id="textInput" placeholder="Type your message...">
+        <div>
+            <input type="text" class="text-input" id="textInput" name="User" placeholder="Type your message...">
             <button onclick="sendMessage()">Send</button>
             <button onclick="voiceChat()">Voice</button>
         </div>
@@ -121,10 +121,18 @@
             if (message) {
                 addMessage(message, 'user');
                 input.value = '';
-                
-                setTimeout(() => {
-                    addMessage('This is AI response', 'ai');
-                }, 500);
+                const data=JSON.stringify({"User":message})
+                fetch("http://127.0.0.1:8000/do",{
+                    method:"POST",
+                    // headers:{
+                    //     'Content-Type':'application/json',
+                    //     'Accept':'application/json'
+                    // },
+                    body:data
+                }).then(res=>res.json()).then(res=>{
+                    console.log(res)
+                    addMessage(res.Response,'ai')
+                })
             }
         }
 
