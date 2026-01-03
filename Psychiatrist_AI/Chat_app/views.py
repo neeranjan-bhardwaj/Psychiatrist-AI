@@ -16,7 +16,7 @@ def test(request):
 @api_view(['POST'])
 def chat(request):
     message=request.data.get("message")
-    clint=genai.Client(api_key="AIzaSyCdlDm7whxklJV9F-TM0XRa8TlVfFs0KK4")
+    clint=genai.Client(api_key="")
     response=clint.models.generate_content(
         model='gemini-2.5-flash',
         config=types.GenerateContentConfig(
