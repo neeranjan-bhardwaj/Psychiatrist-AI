@@ -1,24 +1,27 @@
 import json
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
 from django.http import JsonResponse,HttpResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework import status
 from google import genai
+from google.genai import types
 
 @csrf_exempt
-def home(request):
+def test(request):
     return render(request, 'index.html')
 
-
-@csrf_exempt
-@require_POST
+# @csrf_exempt
+@api_view(['POST'])
 def chat(request):
-    dta=json.loads(request.body.decode('utf-8'))
-    name=dta.get("User")
-    clint=genai.Client(api_key="AIzaSyDEZheQAel6JDmHw4YwVYx00TMXW-LC1Jo")
-    response = clint.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=name
+    message=request.data.get("message")
+    clint=genai.Client(api_key="AIzaSyCdlDm7whxklJV9F-TM0XRa8TlVfFs0KK4")
+    response=clint.models.generate_content(
+        model='gemini-2.5-flash',
+        config=types.GenerateContentConfig(
+            system_instruction=''
+        ),
+        contents=message
     )
-    print(response.text)
-    return JsonResponse({"Response":response.text})
+    return Response({"res":response.text})
